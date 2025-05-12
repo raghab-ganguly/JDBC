@@ -1,0 +1,61 @@
+/*Assignment #2:Write a JDBC Application to display all
+records from "DEPT"(default database table) of Oracle Database Software by following real time coding standarads.
+*/
+package com.wipro.test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class Test {
+	public static void main(String[] args) {
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			Class.forName("oracle.jdbc.OracleDriver");
+			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "system", "tiger");
+			if (con != null) {
+				st = con.createStatement();
+			}
+			if (st != null) {
+				rs = st.executeQuery("SELECT REPTNO,DNAME,LOC FROM DEPT");
+			}
+			if (rs != null) {
+				System.out.println("DEPTNO\tRNAME\tLOC\n----------------------------------");
+				while (rs.next()) {
+					System.out.println(rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
+		} // end of finally
+	}// end of main
+}// end of class

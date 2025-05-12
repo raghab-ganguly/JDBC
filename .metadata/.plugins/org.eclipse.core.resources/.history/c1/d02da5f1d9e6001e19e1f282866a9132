@@ -1,0 +1,51 @@
+/*Assignement #3:Write aJDBC Application to give employee 
+details(empno,ename,job,sal) from "Emp" database table based on the initial chars of given employee name.
+*/
+package com.wipro.test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+
+public class SelectTest {
+
+	public static void main(String[] args) {
+		Connection con=null;
+		Statement st=null;
+		ResultSet rs=null;
+		Scanner sc=null;
+		try {
+			Class.forName("oracle.jdbc.OracleDriver");
+			con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "system", "tiger");
+			if(con != null) {
+				st=con.createStatement();
+			}
+			if(st != null) {
+				rs=st.executeQuery("SELECT EMPNO,ENAME,JOB,SAL FROM EMP WHERE ENAME LIKE 'A%'");
+			}
+			if(rs != null) {
+				boolean flag=true;
+				while(rs.next()) {
+					flag=false;
+					System.out.println(rs.getInt(1)+"\t"+rs.getString(2)+"\t"+rs.getString(3)+"\t"+rs.getDouble(4));
+				}
+				if(flag) {
+					System.out.println("Records not found!!");
+				}
+			}
+		}
+		catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		finally {
+			
+		}//end of finally
+	}//end of main
+}//end of class
